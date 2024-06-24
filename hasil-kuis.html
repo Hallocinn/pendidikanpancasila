@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Kuis</title>
+    <link rel="stylesheet" href="style-kuis.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="branding">
+                <img src="logo.png" alt="Logo">
+                <span>Media Pembelajaran Pancasila</span>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="materi.html">Materi</a></li>
+                <li><a href="kuis.html">Kuis</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="quiz-results">
+        <h1>Hasil Kuis</h1>
+        
+        <div class="results">
+            <p>Nilai Anda: <span id="quiz-score"></span> / 100</p>
+            <p>Jumlah Benar: <span id="correct-count"></span></p>
+            <p>Jumlah Salah: <span id="incorrect-count"></span></p>
+            <ul id="incorrect-questions"></ul>
+        </div>
+
+        <a href="kuis.html" class="btn">Kembali ke Kuis</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Media Pembelajaran Pancasila</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizScoreElement = document.getElementById('quiz-score');
+            const correctCountElement = document.getElementById('correct-count');
+            const incorrectCountElement = document.getElementById('incorrect-count');
+            const incorrectQuestionsElement = document.getElementById('incorrect-questions');
+    
+            const quizData = JSON.parse(localStorage.getItem('quizData'));
+    
+            if (quizData) {
+                let correctCount = 0;
+                let incorrectQuestions = [];
+    
+                quizData.forEach((question, index) => {
+                    const userAnswer = question.userAnswer;
+                    const correctAnswer = question.correctAnswer;
+    
+                    if (userAnswer === correctAnswer) {
+                        correctCount += 1;
+                    } else {
+                        incorrectQuestions.push(index + 1); // Menyimpan nomor pertanyaan yang salah
+                    }
+                });
+    
+                const quizScore = correctCount * 10; // Menghitung nilai total
+                quizScoreElement.textContent = quizScore;
+                correctCountElement.textContent = correctCount;
+                incorrectCountElement.textContent = quizData.length - correctCount;
+    
+                // Menampilkan daftar nomor soal yang salah
+                incorrectQuestions.forEach((questionNumber) => {
+                    const li = document.createElement('li');
+                    li.textContent = `Soal ${questionNumber}`;
+                    incorrectQuestionsElement.appendChild(li);
+                });
+            }
+        });
+    </script>
+    
+</body>
+</html>
